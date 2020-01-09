@@ -1420,7 +1420,7 @@ var mainFunction = function(){
                         var mainX = 50 + Math.floor(Math.random() * 101)
                         var mainY = 100 + Math.floor(Math.random() * 301)
                         
-                        console.log (mainX,mainY,50,100)
+                        //console.log (mainX,mainY,50,100)
                         videopostsetup(mainX,mainY,SVGobject,VidConfigs,text,i,oldpData,oldi)   
                         
                         
@@ -1431,12 +1431,13 @@ var mainFunction = function(){
                     //For Backgrounds - https://loading.io/pattern/ 
                     var ans = ''
                     if (theOne == 0){
-                        ans = MaseLikePatternA_Background(VidConfigs,'id="svg_Video_holder"')
+                        ans = MaseLikePatternA_Background(VidConfigs,'id="svg_Video_holder"',";margin-left: 0;")
                     }else if(theOne == 1){
-                        ans = MaseLikePatternB_Background(VidConfigs,'id="svg_Video_holder"')
+                        ans = MaseLikePatternB_Background(VidConfigs,'id="svg_Video_holder"',";margin-left: 0;")
                     }else if(theOne == 2){
-                        ans = MaseLikePatternC_Background(VidConfigs,'id="svg_Video_holder"')
+                        ans = MaseLikePatternC_Background(VidConfigs,'id="svg_Video_holder"',";margin-left: 0;")
                     }
+                    
                     return ans  
                 }
             
@@ -1446,8 +1447,14 @@ var mainFunction = function(){
                     var mainW = VidConfigs.SVGwidth
                     var mainH = VidConfigs.SVGheight
                     
+                   
+                    
+                    
+                    
+                    
                     //Comment Back Box
                     var boxW = (mainW * 0.885) - (mainX * 0.75) + Math.floor(Math.random() * (mainW * 0.026125))
+                    
                     //console.log(boxW,(mainW * 0.885) - (mainX * 0.75))
                     var boxH = 365 // rewriten later
                     PostArtGroup.append("rect").attr("width",boxW).attr("height",boxH).attr("x",mainX).attr("y",mainY)
@@ -1463,7 +1470,8 @@ var mainFunction = function(){
                          d3plus.textwrap().container(d3.select("#PostArtGroupRectText")).shape('square')
                         .width(boxW +(mainW*0.0521)).height(750).resize(false) // hard coded number here
                         .text(textfixer(text[i].com)).draw(); 
-                    }else{
+                    }
+                    else{
                         PostArtGroup.append("text").attr("x",(mainX +(mainW * 0.0652))).attr("y",(mainY +(mainH * 0.0556)))
                         .attr("id","PostArtGroupRectText").attr("fill","white")
                         .attr("style","font-size: 30px; font-weight: lighter;")
@@ -1546,6 +1554,7 @@ var mainFunction = function(){
                     .attr("class","PostArtGroupPosttext").attr("id","PostArtGroupPosttext8")
                     .attr("style","fill:#A5A4A4;stroke:none;stroke-width:1").text("Comment Reply Level:" + text[i].level)
                     
+                    //Redo the font based in typ of comment
                     if(oldpData != null){
                         d3.select("#PostArtGroupPosttext7").attr("style","fill:#A5A4A4;stroke:none;stroke-width:1;font-size: 20px;")
                         .attr("dy",(mainH * 0.027037))
@@ -1554,10 +1563,11 @@ var mainFunction = function(){
                         .attr("dy",(mainH * 0.027037))
                     }
                     
-                    
+                    //Redo the height
                     var PostArtGroupRectText = document.getElementById('PostArtGroupRectText');
                     var bBox = PostArtGroupRectText.getBBox();
                     var NewHei = (bBox.height + (mainH * 0.037039 * 2.09))
+                    var NawHei = (bBox.height+(mainH*0.037039*2.09)-((tri1Y-(mainH*0.0278))/2.1))
                     
                     if ((bBox.height + (mainH * 0.037039 * 2.09)) < 240 ){
                        NewHei = 240 
@@ -1569,6 +1579,7 @@ var mainFunction = function(){
                     d3.select("#PostArtGroupReplytextLine").attr("height",(bBox.height+(mainH*0.037039*2.09)-((tri1Y-(mainH*0.0278))/2.1)))
                     
                     
+                    d3.selectAll("#configs_form_holder *").remove()
                     
                     if (text[i].verimage){
                         //aspect ratios: aspectRatio = ( oldWidth / oldHeight )
@@ -1580,29 +1591,66 @@ var mainFunction = function(){
                         var PostArtGroupRectText = document.getElementById('PostArtGroupCommentBox');
                         var TBox = PostArtGroupRectText.getBBox();
                         
-                        var locYim = TBox.y + TBox.height + (mainH * 0.113889) - Math.floor(Math.random() * (mainH * 0.046125)) 
-                        var locXim = TBox.x + (mainW * 0.533889) -  Math.floor(Math.random() * (mainW * 0.026125)) 
+                        
+                        
+                        var boundXLe = (mainW * 0.533889) 
+                        var boundXRi = mainW - (mainW * 0.0533889)
+                        var boundYup = TBox.y + TBox.height - (mainH * 0.1021) + (Math.floor(Math.random() * (mainH * 0.023221)))
+                        var boundYdo = mainH - (mainH * 0.013221)
+                        
+                        PostArtGroup.append("rect").attr("width",(boundXRi-boundXLe)).attr("height",(boundYdo-boundYup)).attr("x",boundXLe).attr("y",boundYup)
+                        .attr("id","PicBoundsTest").attr("text-anchor","middle")
+                        .attr("style","fill:white;stroke:none;stroke-width:1;font-family: Verdana;")
+                        
+                        
+                        //console.log(boundXLe,boundXRi,boundYup,boundYdo)
+                        
+                        var locYim = boundYdo - boundYup + (Math.floor(Math.random() * (mainH * 0.032221)))
+                            //boundYup + (Math.floor(Math.random() * (mainH * 0.032221)))
+                        var locXim = boundXLe + (Math.floor(Math.random() * (mainW * 0.018221)))
                        
+                        var locHim = boundYdo - (mainH - locYim) - (Math.floor(Math.random() * (mainH * 0.018221)))
+                        var locWim = (locHim * imageRatio)
                         
-                        var locHim = (mainH - locYim) - (mainH * 0.013889) - Math.floor(Math.random() * (mainH * 0.046125)) 
+                        //console.log(locHim,locWim)
                         
-                        var locWim = (locHim * imageRatio) 
+                        var runimage = true
+                       
+                        var i;
+                        
+                        for(i = 0; i < 0 ; i++){
+                           if (((locXim + locWim) >boundXRi)||((locYim + locHim)>boundYdo)) {
+                                locHim = locHim * 0.995
+                                locWim = (locHim * imageRatio)
+                                console.log(locHim,locWim)
+                            }else{
+                                runimage = false
+                                i = i + 1
+                            }
+                        }   
+                            
+                        
+                        
                         //console.log(locXim, locYim);
                         
                         if(text[i].ext != ".webm"){
+                            
+                            
+                            
                             d3.select("#configs_form_holder")
                             .append("img")
                             .attr("src",function(aData){return ("http://is2.4chan.org/"+text[i].Pastlink +"/"+text[i].tim+text[i].ext)})
                             .attr("height",locHim)//(mainH * 0.0278)
                             .attr("width",locWim)//(mainW * 0.0026)
-                            .attr("style","position: relative;top: -" + locYim + "px;left: "+locXim+"px; z-index:9;")
+                            .attr("style","position: relative;top: -"+locYim +"px;left: "+  locXim +"px; z-index:9;")
                             
                         }else{
+                            
                             d3.select("#configs_form_holder")
                             .append("video")
-                            .attr("height",text[i].h/5)
-                            .attr("width",text[i].w/5)
-                            .attr("style","position: relative;top: -500px;left: 1300px; z-index:9;")
+                            .attr("height",locHim)
+                            .attr("width",locWim)
+                            .attr("style","position: relative;top: -"+locYim +"px;left: "+  locXim +"px; z-index:9;")
                             .attr("autoplay","")
                             .text("Your browser does not support the video tag.")
                             .append("source")
@@ -1629,17 +1677,17 @@ var mainFunction = function(){
             }
             //video assets
                 //video Background Art used videoBackgroundArtPicker function ; For Backgrounds - https://loading.io/pattern/ 
-                function MaseLikePatternA_Background(VidConfigs,ider){
+                function MaseLikePatternA_Background(VidConfigs,ider,adder){
                     //width="'+VidConfigs.SVGwidth+'" height="'+VidConfigs.SVGheight+'" preserveAspectRatio="xMidYMid" viewBox="0 0 -'+VidConfigs.SVGheight+' '+VidConfigs.SVGwidth+'">
-                    return '<svg '+ider+' xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" style="margin:auto;background:#222222;display:block;z-index:1;position:relative" width="'+VidConfigs.SVGwidth+'" height="'+VidConfigs.SVGheight+'" preserveAspectRatio="xMidYMid" viewBox="0 0 -'+VidConfigs.SVGheight+' '+VidConfigs.SVGwidth+'"><defs><pattern id="pid-0.5065629926574429" x="0" y="0" width="128" height="128" patternUnits="userSpaceOnUse"><g transform="scale(0.5)"><defs><g id="pat-0.9833584770815218"><polyline fill-rule="evenodd" clip-rule="evenodd" fill="none" stroke="#a5a4a4" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" points=" -3,-2 16.5,15.5 31.5,0.5 63.5,32.5 48.5,47.5 31.5,32.5 -0.5,64.5 16.5,79.5 31.5,64.5 47.5,79.5 95.5,32.5 80.5,15.5 95.5,0.5 127.5,32.5 48.5,111.5 31.5,96.5 -0.5,128.5 16.5,143.5 31.5,127.5 63.5,160.5 80.5,143.5 63.5,128.5 159.5,32.5 144.5,15.5 159.5,0.5 175.5,16.5 192,0 208,16 224,0 256,32 240,48 224,32 207.501,48.501 223.5,64.5 207.5,80.5 176.5,47.5 144.5,80.5 159.5,96.5 175.5,80.5 191.5,96.5 159.5,128.5 127.5,96.5 95.5,127.5 111.5,143.5 127.5,127.5 175.5,176.5 159.5,192.5 127.5,160.5 111.5,176.5 95.5,160.5 63.5,192.5 31.5,160.5 16.5,175.5 31.999,191.483 0,224 16,240 32,225 64,256 80,240 64,224 79.667,208.333 95.5,192.5 111.5,207.5 95.5,224.5 111.5,239.5 127.5,256.5 143.5,240.5 127.5,224.5 143.5,208.5 175.5,240.5 191.5,224.5 175.5,208.5 207.5,176.5 224,160 208,144 191.998,160.998 175.5,144.5 207.5,112.5 240,80 256,96 223.5,128.5 256,160 239.5,176.5 256,192 240,208 224,192 207.5,208.5 223.5,224.5 207.5,240.5 223.5,256.5 240,240 259,259" stroke-dasharray="70.3405269077846 31.60226571219308 70.3405269077846 31.60226571219308 70.3405269077846 31.60226571219308 70.3405269077846 31.60226571219308 70.3405269077846 31.60226571219308 70.3405269077846 31.60226571219308 70.3405269077846 31.60226571219308 70.3405269077846 31.60226571219308 70.3405269077846 31.60226571219308 70.3405269077846 31.60226571219308 70.3405269077846 31.60226571219308 70.3405269077846 31.60226571219308 70.3405269077846 31.60226571219308 70.3405269077846 31.60226571219308 70.3405269077846 31.60226571219308 70.3405269077846 31.60226571219308 70.3405269077846 31.60226571219308 70.3405269077846 31.60226571219308 70.3405269077846 31.60226571219308 70.3405269077846 31.60226571219308 70.3405269077846 31.60226571219308 70.3405269077846 31.60226571219308 70.3405269077846 31.60226571219308 70.3405269077846 31.60226571219308 70.3405269077846 31.60226571219308 70.3405269077846 31.60226571219308 70.3405269077846 31.60226571219308 70.3405269077846 31.60226571219308"><animate attributeName="stroke-dashoffset" keyTimes="0;1" values="0;101.94279261997768" repeatCount="indefinite" dur="1.5151515151515151s"></animate></polyline></g></defs><use xlink:href="#pat-0.9833584770815218" x="0" y="0"></use><use xlink:href="#pat-0.9833584770815218" x="-256" y="0"></use><use xlink:href="#pat-0.9833584770815218" x="256" y="0"></use><use xlink:href="#pat-0.9833584770815218" x="0" y="-256"></use><use xlink:href="#pat-0.9833584770815218" x="0" y="256"></use></g></pattern></defs><rect x="0" y="0" width="'+VidConfigs.SVGwidth+'" height="'+VidConfigs.SVGheight+'" fill="url(#pid-0.5065629926574429)"></rect></svg>'
+                    return '<svg '+ider+' xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" style="margin:auto;background:#222222;display:block;z-index:1;position:relative'+adder+'" width="'+VidConfigs.SVGwidth+'" height="'+VidConfigs.SVGheight+'" preserveAspectRatio="xMidYMid" viewBox="0 0 -'+VidConfigs.SVGheight+' '+VidConfigs.SVGwidth+'"><defs><pattern id="pid-0.5065629926574429" x="0" y="0" width="128" height="128" patternUnits="userSpaceOnUse"><g transform="scale(0.5)"><defs><g id="pat-0.9833584770815218"><polyline fill-rule="evenodd" clip-rule="evenodd" fill="none" stroke="#a5a4a4" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" points=" -3,-2 16.5,15.5 31.5,0.5 63.5,32.5 48.5,47.5 31.5,32.5 -0.5,64.5 16.5,79.5 31.5,64.5 47.5,79.5 95.5,32.5 80.5,15.5 95.5,0.5 127.5,32.5 48.5,111.5 31.5,96.5 -0.5,128.5 16.5,143.5 31.5,127.5 63.5,160.5 80.5,143.5 63.5,128.5 159.5,32.5 144.5,15.5 159.5,0.5 175.5,16.5 192,0 208,16 224,0 256,32 240,48 224,32 207.501,48.501 223.5,64.5 207.5,80.5 176.5,47.5 144.5,80.5 159.5,96.5 175.5,80.5 191.5,96.5 159.5,128.5 127.5,96.5 95.5,127.5 111.5,143.5 127.5,127.5 175.5,176.5 159.5,192.5 127.5,160.5 111.5,176.5 95.5,160.5 63.5,192.5 31.5,160.5 16.5,175.5 31.999,191.483 0,224 16,240 32,225 64,256 80,240 64,224 79.667,208.333 95.5,192.5 111.5,207.5 95.5,224.5 111.5,239.5 127.5,256.5 143.5,240.5 127.5,224.5 143.5,208.5 175.5,240.5 191.5,224.5 175.5,208.5 207.5,176.5 224,160 208,144 191.998,160.998 175.5,144.5 207.5,112.5 240,80 256,96 223.5,128.5 256,160 239.5,176.5 256,192 240,208 224,192 207.5,208.5 223.5,224.5 207.5,240.5 223.5,256.5 240,240 259,259" stroke-dasharray="70.3405269077846 31.60226571219308 70.3405269077846 31.60226571219308 70.3405269077846 31.60226571219308 70.3405269077846 31.60226571219308 70.3405269077846 31.60226571219308 70.3405269077846 31.60226571219308 70.3405269077846 31.60226571219308 70.3405269077846 31.60226571219308 70.3405269077846 31.60226571219308 70.3405269077846 31.60226571219308 70.3405269077846 31.60226571219308 70.3405269077846 31.60226571219308 70.3405269077846 31.60226571219308 70.3405269077846 31.60226571219308 70.3405269077846 31.60226571219308 70.3405269077846 31.60226571219308 70.3405269077846 31.60226571219308 70.3405269077846 31.60226571219308 70.3405269077846 31.60226571219308 70.3405269077846 31.60226571219308 70.3405269077846 31.60226571219308 70.3405269077846 31.60226571219308 70.3405269077846 31.60226571219308 70.3405269077846 31.60226571219308 70.3405269077846 31.60226571219308 70.3405269077846 31.60226571219308 70.3405269077846 31.60226571219308 70.3405269077846 31.60226571219308"><animate attributeName="stroke-dashoffset" keyTimes="0;1" values="0;101.94279261997768" repeatCount="indefinite" dur="1.5151515151515151s"></animate></polyline></g></defs><use xlink:href="#pat-0.9833584770815218" x="0" y="0"></use><use xlink:href="#pat-0.9833584770815218" x="-256" y="0"></use><use xlink:href="#pat-0.9833584770815218" x="256" y="0"></use><use xlink:href="#pat-0.9833584770815218" x="0" y="-256"></use><use xlink:href="#pat-0.9833584770815218" x="0" y="256"></use></g></pattern></defs><rect x="0" y="0" width="'+VidConfigs.SVGwidth+'" height="'+VidConfigs.SVGheight+'" fill="url(#pid-0.5065629926574429)"></rect></svg>'
                 }
-                function MaseLikePatternB_Background(VidConfigs,ider){
+                function MaseLikePatternB_Background(VidConfigs,ider,adder){
                     //width="'+VidConfigs.SVGwidth+'" height="'+VidConfigs.SVGheight+'" preserveAspectRatio="xMidYMid" viewBox="0 0 -'+VidConfigs.SVGheight+' '+VidConfigs.SVGwidth+'">
-                    return '<svg '+ider+' xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" style="margin:auto;background:#222222;display:block;z-index:1;position:relative" width="'+VidConfigs.SVGwidth+'" height="'+VidConfigs.SVGheight+'" preserveAspectRatio="xMidYMid" viewBox="0 0 -'+VidConfigs.SVGheight+' '+VidConfigs.SVGwidth+'"><defs><pattern id="pid-0.8617823405425016" x="0" y="0" width="261.12" height="261.12" patternUnits="userSpaceOnUse"><g transform="scale(1.02)"><defs><g id="pat-0.9098463719290082"><polyline fill-rule="evenodd" clip-rule="evenodd" fill="none" stroke="#515151" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" points=" -3,-2 16.5,15.5 31.5,0.5 63.5,32.5 48.5,47.5 31.5,32.5 -0.5,64.5 16.5,79.5 31.5,64.5 47.5,79.5 95.5,32.5 80.5,15.5 95.5,0.5 127.5,32.5 48.5,111.5 31.5,96.5 -0.5,128.5 16.5,143.5 31.5,127.5 63.5,160.5 80.5,143.5 63.5,128.5 159.5,32.5 144.5,15.5 159.5,0.5 175.5,16.5 192,0 208,16 224,0 256,32 240,48 224,32 207.501,48.501 223.5,64.5 207.5,80.5 176.5,47.5 144.5,80.5 159.5,96.5 175.5,80.5 191.5,96.5 159.5,128.5 127.5,96.5 95.5,127.5 111.5,143.5 127.5,127.5 175.5,176.5 159.5,192.5 127.5,160.5 111.5,176.5 95.5,160.5 63.5,192.5 31.5,160.5 16.5,175.5 31.999,191.483 0,224 16,240 32,225 64,256 80,240 64,224 79.667,208.333 95.5,192.5 111.5,207.5 95.5,224.5 111.5,239.5 127.5,256.5 143.5,240.5 127.5,224.5 143.5,208.5 175.5,240.5 191.5,224.5 175.5,208.5 207.5,176.5 224,160 208,144 191.998,160.998 175.5,144.5 207.5,112.5 240,80 256,96 223.5,128.5 256,160 239.5,176.5 256,192 240,208 224,192 207.5,208.5 223.5,224.5 207.5,240.5 223.5,256.5 240,240 259,259" stroke-dasharray="74.21435302734375 20.93225341796875 74.21435302734375 20.93225341796875 74.21435302734375 20.93225341796875 74.21435302734375 20.93225341796875 74.21435302734375 20.93225341796875 74.21435302734375 20.93225341796875 74.21435302734375 20.93225341796875 74.21435302734375 20.93225341796875 74.21435302734375 20.93225341796875 74.21435302734375 20.93225341796875 74.21435302734375 20.93225341796875 74.21435302734375 20.93225341796875 74.21435302734375 20.93225341796875 74.21435302734375 20.93225341796875 74.21435302734375 20.93225341796875 74.21435302734375 20.93225341796875 74.21435302734375 20.93225341796875 74.21435302734375 20.93225341796875 74.21435302734375 20.93225341796875 74.21435302734375 20.93225341796875 74.21435302734375 20.93225341796875 74.21435302734375 20.93225341796875 74.21435302734375 20.93225341796875 74.21435302734375 20.93225341796875 74.21435302734375 20.93225341796875 74.21435302734375 20.93225341796875 74.21435302734375 20.93225341796875 74.21435302734375 20.93225341796875 74.21435302734375 20.93225341796875 74.21435302734375 20.93225341796875"><animate attributeName="stroke-dashoffset" keyTimes="0;1" values="0;95.1466064453125" repeatCount="indefinite" dur="1.5151515151515151s"></animate></polyline></g></defs><use xlink:href="#pat-0.9098463719290082" x="0" y="0"></use><use xlink:href="#pat-0.9098463719290082" x="-256" y="0"></use><use xlink:href="#pat-0.9098463719290082" x="256" y="0"></use><use xlink:href="#pat-0.9098463719290082" x="0" y="-256"></use><use xlink:href="#pat-0.9098463719290082" x="0" y="256"></use></g></pattern></defs><rect x="0" y="0" width="'+VidConfigs.SVGwidth+'" height="'+VidConfigs.SVGheight+'" fill="url(#pid-0.8617823405425016)"></rect></svg>'
+                    return '<svg '+ider+' xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" style="margin:auto;background:#222222;display:block;z-index:1;position:relative'+adder+'" width="'+VidConfigs.SVGwidth+'" height="'+VidConfigs.SVGheight+'" preserveAspectRatio="xMidYMid" viewBox="0 0 -'+VidConfigs.SVGheight+' '+VidConfigs.SVGwidth+'"><defs><pattern id="pid-0.8617823405425016" x="0" y="0" width="261.12" height="261.12" patternUnits="userSpaceOnUse"><g transform="scale(1.02)"><defs><g id="pat-0.9098463719290082"><polyline fill-rule="evenodd" clip-rule="evenodd" fill="none" stroke="#515151" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" points=" -3,-2 16.5,15.5 31.5,0.5 63.5,32.5 48.5,47.5 31.5,32.5 -0.5,64.5 16.5,79.5 31.5,64.5 47.5,79.5 95.5,32.5 80.5,15.5 95.5,0.5 127.5,32.5 48.5,111.5 31.5,96.5 -0.5,128.5 16.5,143.5 31.5,127.5 63.5,160.5 80.5,143.5 63.5,128.5 159.5,32.5 144.5,15.5 159.5,0.5 175.5,16.5 192,0 208,16 224,0 256,32 240,48 224,32 207.501,48.501 223.5,64.5 207.5,80.5 176.5,47.5 144.5,80.5 159.5,96.5 175.5,80.5 191.5,96.5 159.5,128.5 127.5,96.5 95.5,127.5 111.5,143.5 127.5,127.5 175.5,176.5 159.5,192.5 127.5,160.5 111.5,176.5 95.5,160.5 63.5,192.5 31.5,160.5 16.5,175.5 31.999,191.483 0,224 16,240 32,225 64,256 80,240 64,224 79.667,208.333 95.5,192.5 111.5,207.5 95.5,224.5 111.5,239.5 127.5,256.5 143.5,240.5 127.5,224.5 143.5,208.5 175.5,240.5 191.5,224.5 175.5,208.5 207.5,176.5 224,160 208,144 191.998,160.998 175.5,144.5 207.5,112.5 240,80 256,96 223.5,128.5 256,160 239.5,176.5 256,192 240,208 224,192 207.5,208.5 223.5,224.5 207.5,240.5 223.5,256.5 240,240 259,259" stroke-dasharray="74.21435302734375 20.93225341796875 74.21435302734375 20.93225341796875 74.21435302734375 20.93225341796875 74.21435302734375 20.93225341796875 74.21435302734375 20.93225341796875 74.21435302734375 20.93225341796875 74.21435302734375 20.93225341796875 74.21435302734375 20.93225341796875 74.21435302734375 20.93225341796875 74.21435302734375 20.93225341796875 74.21435302734375 20.93225341796875 74.21435302734375 20.93225341796875 74.21435302734375 20.93225341796875 74.21435302734375 20.93225341796875 74.21435302734375 20.93225341796875 74.21435302734375 20.93225341796875 74.21435302734375 20.93225341796875 74.21435302734375 20.93225341796875 74.21435302734375 20.93225341796875 74.21435302734375 20.93225341796875 74.21435302734375 20.93225341796875 74.21435302734375 20.93225341796875 74.21435302734375 20.93225341796875 74.21435302734375 20.93225341796875 74.21435302734375 20.93225341796875 74.21435302734375 20.93225341796875 74.21435302734375 20.93225341796875 74.21435302734375 20.93225341796875 74.21435302734375 20.93225341796875 74.21435302734375 20.93225341796875"><animate attributeName="stroke-dashoffset" keyTimes="0;1" values="0;95.1466064453125" repeatCount="indefinite" dur="1.5151515151515151s"></animate></polyline></g></defs><use xlink:href="#pat-0.9098463719290082" x="0" y="0"></use><use xlink:href="#pat-0.9098463719290082" x="-256" y="0"></use><use xlink:href="#pat-0.9098463719290082" x="256" y="0"></use><use xlink:href="#pat-0.9098463719290082" x="0" y="-256"></use><use xlink:href="#pat-0.9098463719290082" x="0" y="256"></use></g></pattern></defs><rect x="0" y="0" width="'+VidConfigs.SVGwidth+'" height="'+VidConfigs.SVGheight+'" fill="url(#pid-0.8617823405425016)"></rect></svg>'
                 }
-                function MaseLikePatternC_Background(VidConfigs,ider){
+                function MaseLikePatternC_Background(VidConfigs,ider,adder){
                     //width="'+VidConfigs.SVGwidth+'" height="'+VidConfigs.SVGheight+'" preserveAspectRatio="xMidYMid" viewBox="0 0 -'+VidConfigs.SVGheight+' '+VidConfigs.SVGwidth+'">
-                    return '<svg '+ider+' xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" style="margin:auto;background:#222222;display:block;z-index:1;position:relative" width="'+VidConfigs.SVGwidth+'" height="'+VidConfigs.SVGheight+'" preserveAspectRatio="xMidYMid" viewBox="0 0 -'+VidConfigs.SVGheight+' '+VidConfigs.SVGwidth+'"><defs> <pattern id="pid-0.7861150321209958" x="0" y="0" width="360.96000000000004" height="360.96000000000004" patternUnits="userSpaceOnUse"> <g transform="scale(1.4100000000000001)"><defs><g id="pat-0.2321887380297638"><polyline fill-rule="evenodd" clip-rule="evenodd" fill="none" stroke="#ffe200" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" points=" -3,-2 16.5,15.5 31.5,0.5 63.5,32.5 48.5,47.5 31.5,32.5 -0.5,64.5 16.5,79.5 31.5,64.5 47.5,79.5 95.5,32.5 80.5,15.5 95.5,0.5 127.5,32.5 48.5,111.5 31.5,96.5 -0.5,128.5 16.5,143.5 31.5,127.5 63.5,160.5 80.5,143.5 63.5,128.5 159.5,32.5 144.5,15.5 159.5,0.5 175.5,16.5 192,0 208,16 224,0 256,32 240,48 224,32 207.501,48.501 223.5,64.5 207.5,80.5 176.5,47.5 144.5,80.5 159.5,96.5 175.5,80.5 191.5,96.5 159.5,128.5 127.5,96.5 95.5,127.5 111.5,143.5 127.5,127.5 175.5,176.5 159.5,192.5 127.5,160.5 111.5,176.5 95.5,160.5 63.5,192.5 31.5,160.5 16.5,175.5 31.999,191.483 0,224 16,240 32,225 64,256 80,240 64,224 79.667,208.333 95.5,192.5 111.5,207.5 95.5,224.5 111.5,239.5 127.5,256.5 143.5,240.5 127.5,224.5 143.5,208.5 175.5,240.5 191.5,224.5 175.5,208.5 207.5,176.5 224,160 208,144 191.998,160.998 175.5,144.5 207.5,112.5 240,80 256,96 223.5,128.5 256,160 239.5,176.5 256,192 240,208 224,192 207.5,208.5 223.5,224.5 207.5,240.5 223.5,256.5 240,240 259,259" stroke-dasharray="90.82176069779828 168.66898415305397 90.82176069779828 168.66898415305397 90.82176069779828 168.66898415305397 90.82176069779828 168.66898415305397 90.82176069779828 168.66898415305397 90.82176069779828 168.66898415305397 90.82176069779828 168.66898415305397 90.82176069779828 168.66898415305397 90.82176069779828 168.66898415305397 90.82176069779828 168.66898415305397 90.82176069779828 168.66898415305397"> <animate attributeName="stroke-dashoffset" keyTimes="0;1" values="0;259.49074485085225" repeatCount="indefinite" dur="20s"></animate> </polyline></g></defs><use xlink:href="#pat-0.2321887380297638" x="0" y="0"></use><use xlink:href="#pat-0.2321887380297638" x="-256" y="0"></use><use xlink:href="#pat-0.2321887380297638" x="256" y="0"></use><use xlink:href="#pat-0.2321887380297638" x="0" y="-256"></use><use xlink:href="#pat-0.2321887380297638" x="0" y="256"></use></g></pattern></defs><rect x="0" y="0" width="'+VidConfigs.SVGwidth+'" height="'+VidConfigs.SVGheight+'" fill="url(#pid-0.7861150321209958)"></rect></svg>'    
+                    return '<svg '+ider+' xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" style="margin:auto;background:#222222;display:block;z-index:1;position:relative'+adder+'" width="'+VidConfigs.SVGwidth+'" height="'+VidConfigs.SVGheight+'" preserveAspectRatio="xMidYMid" viewBox="0 0 -'+VidConfigs.SVGheight+' '+VidConfigs.SVGwidth+'"><defs> <pattern id="pid-0.7861150321209958" x="0" y="0" width="360.96000000000004" height="360.96000000000004" patternUnits="userSpaceOnUse"> <g transform="scale(1.4100000000000001)"><defs><g id="pat-0.2321887380297638"><polyline fill-rule="evenodd" clip-rule="evenodd" fill="none" stroke="#ffe200" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" points=" -3,-2 16.5,15.5 31.5,0.5 63.5,32.5 48.5,47.5 31.5,32.5 -0.5,64.5 16.5,79.5 31.5,64.5 47.5,79.5 95.5,32.5 80.5,15.5 95.5,0.5 127.5,32.5 48.5,111.5 31.5,96.5 -0.5,128.5 16.5,143.5 31.5,127.5 63.5,160.5 80.5,143.5 63.5,128.5 159.5,32.5 144.5,15.5 159.5,0.5 175.5,16.5 192,0 208,16 224,0 256,32 240,48 224,32 207.501,48.501 223.5,64.5 207.5,80.5 176.5,47.5 144.5,80.5 159.5,96.5 175.5,80.5 191.5,96.5 159.5,128.5 127.5,96.5 95.5,127.5 111.5,143.5 127.5,127.5 175.5,176.5 159.5,192.5 127.5,160.5 111.5,176.5 95.5,160.5 63.5,192.5 31.5,160.5 16.5,175.5 31.999,191.483 0,224 16,240 32,225 64,256 80,240 64,224 79.667,208.333 95.5,192.5 111.5,207.5 95.5,224.5 111.5,239.5 127.5,256.5 143.5,240.5 127.5,224.5 143.5,208.5 175.5,240.5 191.5,224.5 175.5,208.5 207.5,176.5 224,160 208,144 191.998,160.998 175.5,144.5 207.5,112.5 240,80 256,96 223.5,128.5 256,160 239.5,176.5 256,192 240,208 224,192 207.5,208.5 223.5,224.5 207.5,240.5 223.5,256.5 240,240 259,259" stroke-dasharray="90.82176069779828 168.66898415305397 90.82176069779828 168.66898415305397 90.82176069779828 168.66898415305397 90.82176069779828 168.66898415305397 90.82176069779828 168.66898415305397 90.82176069779828 168.66898415305397 90.82176069779828 168.66898415305397 90.82176069779828 168.66898415305397 90.82176069779828 168.66898415305397 90.82176069779828 168.66898415305397 90.82176069779828 168.66898415305397"> <animate attributeName="stroke-dashoffset" keyTimes="0;1" values="0;259.49074485085225" repeatCount="indefinite" dur="20s"></animate> </polyline></g></defs><use xlink:href="#pat-0.2321887380297638" x="0" y="0"></use><use xlink:href="#pat-0.2321887380297638" x="-256" y="0"></use><use xlink:href="#pat-0.2321887380297638" x="256" y="0"></use><use xlink:href="#pat-0.2321887380297638" x="0" y="-256"></use><use xlink:href="#pat-0.2321887380297638" x="0" y="256"></use></g></pattern></defs><rect x="0" y="0" width="'+VidConfigs.SVGwidth+'" height="'+VidConfigs.SVGheight+'" fill="url(#pid-0.7861150321209958)"></rect></svg>'    
                 }
             
             //mains - massSpeakingtool managers
@@ -2524,7 +2572,7 @@ var mainFunction = function(){
                     var promise_massSpeakingtoolv9 = massSpeakingtoolv9(0,VidConfigs.ALLDATA,0,null,null,VidConfigs)
                     promise_massSpeakingtoolv9.then(function(result) {
                         clearTimeout(timeoutResumeInfinity);
-                        console.log("promise_massSpeakingtoolv9 - Check:  2");
+                        console.log("promise_massSpeakingtoolv9 - BIG DONE");
                         console.log("promise_massSpeakingtoolv9 - Result: " + result);
                     })                       
                 })

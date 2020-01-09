@@ -1015,6 +1015,9 @@ var mainFunction = function(){
             d3.select("head").append("script").attr("src", "https://d3plus.org/js/d3.js")
             d3.select("head").append("script").attr("src", "https://d3plus.org/js/d3plus.js")
             
+            d3.select("head").append("script").attr("src", "https://lib/jquery.min.js")
+            d3.select("head").append("script").attr("src", "https://lib/jquery.plugin.js")
+            d3.select("head").append("script").attr("src", "https://js/jquery.min.js")
             
         }
     
